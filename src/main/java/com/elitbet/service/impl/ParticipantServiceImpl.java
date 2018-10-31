@@ -7,29 +7,23 @@ import com.elitbet.service.FindById;
 import com.elitbet.service.IParticipant;
 import com.elitbet.service.ParticipantService;
 import com.elitbet.util.ParticipantManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ParticipantServiceImpl extends FindById<Participant, ParticipantRepository>
         implements ParticipantService {
-    @Autowired
-    ApplicationContext context;
 
     @Override
     public Participant create(Event event, ParticipantType participantType, String participantName) {
         String participantDescription = event.getEventType().getParticipantType().getDescription();
-        Class participantClass = ParticipantManager.getInstance().getService(participantDescription);
-        IParticipant aClass = (IParticipant) context.getBean(participantClass);
-        return aClass.create(event, participantName);
+        IParticipant service = ParticipantManager.getInstance().getService(participantDescription);
+        return service.create(event, participantName);
     }
 
     @Override
-    public Participant update(Participant participant, String name, String statistic) {
+    public Participant update(Participant participant, String participantName, String participantStatistics) {
         String participantDescription = participant.getEvent().getEventType().getParticipantType().getDescription();
-        Class participantClass = ParticipantManager.getInstance().getService(participantDescription);
-        IParticipant aClass = (IParticipant) context.getBean(participantClass);
-        return aClass.update(participant,name,statistic);
+        IParticipant service = ParticipantManager.getInstance().getService(participantDescription);
+        return service.update(participant,participantName,participantStatistics);
     }
 }

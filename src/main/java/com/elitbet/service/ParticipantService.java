@@ -7,5 +7,5 @@ import com.elitbet.model.ParticipantType;
 public interface ParticipantService {
     Participant findById(Long participantId);
     Participant create(Event event, ParticipantType participantType, String name);
-    Participant update(Participant participant, String name, String statistic);
+    Participant update(Participant participant, String name, String statistics);
 }

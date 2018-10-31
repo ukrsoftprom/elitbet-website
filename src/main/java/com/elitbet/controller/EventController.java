@@ -18,11 +18,11 @@ class EventController {
             @RequestParam("id") String id,
             @RequestParam("event_type") String eventType,
             @RequestParam("start_timestamp") long time,
-            @RequestParam("names") String names,
+            @RequestParam("names") String nameString,
             @RequestParam("tournament") String tournament,
-            @RequestParam("coefficients") String coefficients){
+            @RequestParam("coefficients") String coefficientString){
 
-        eventService.updateIfNotExistCreateEvent(id,eventType,time,names,tournament,coefficients);
+        eventService.create(id,eventType,time,nameString,tournament,coefficientString);
         return "Creating";
     }
 

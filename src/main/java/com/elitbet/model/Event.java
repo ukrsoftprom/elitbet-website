@@ -39,19 +39,23 @@ public class Event {
     @Column(name = "EventStatus")
     private String status;
 
-    public boolean notStarted(){
-        return status.equals(not_started);
+    public boolean notFinished() {
+        return !status.equals(finished);
     }
 
-    public boolean isFinished() {
-        return status.equals(finished);
+    public boolean notStarted() {
+        return !status.equals(started);
     }
 
-    public boolean isStarted() {
-        return status.equals(started);
+    public boolean notPostponed() {
+        return !status.equals(postponed);
     }
 
-    public boolean isPostponed() {
-        return status.equals(postponed);
+    public void addParticipant(Participant participant){
+        participants.add(participant);
+    }
+
+    public void addEventResult(EventResult eventResult){
+        resultList.add(eventResult);
     }
 }
