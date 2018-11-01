@@ -10,4 +10,6 @@ public interface EventRepository extends JpaRepository<Event, String> {
     Event getByDescriptionEquals(String description);
 
     List<Event> getAllByEventTypeEqualsAndStatusEqualsOrderByTime(EventType eventType, String status);
+
+    List<Event> getAllByStatusNotLike(String status);
 }

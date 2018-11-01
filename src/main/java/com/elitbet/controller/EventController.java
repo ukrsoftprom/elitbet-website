@@ -1,9 +1,12 @@
 package com.elitbet.controller;
 
+import com.elitbet.model.Event;
 import com.elitbet.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping(path = "/events")
@@ -13,7 +16,7 @@ class EventController {
 
     @GetMapping(path = "/create")
     @ResponseBody
-    public String createFootballMatch(
+    public void createFootballMatch(
             @RequestParam("access_token") String accessToken,
             @RequestParam("id") String id,
             @RequestParam("event_type") String eventType,
@@ -22,8 +25,8 @@ class EventController {
             @RequestParam("tournament") String tournament,
             @RequestParam("coefficients") String coefficientString){
 
+        eventService.updateCoefficients(id,coefficientString);
         eventService.create(id,eventType,time,nameString,tournament,coefficientString);
-        return "Creating";
     }
 
     @GetMapping(path = "/update")
@@ -38,5 +41,11 @@ class EventController {
             @RequestParam(value = "results") String results){
 
         eventService.update(id,tournament,time,names,status,results);
+    }
+
+    @GetMapping(path = "/notstarted")
+    @ResponseBody
+    public List<Event> findAllNotStarted(){
+        return eventService.findAllNotStarted();
     }
 }

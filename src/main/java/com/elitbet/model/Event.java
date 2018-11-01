@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,10 +15,10 @@ import java.util.List;
 @Table(name = "Event")
 @Setter@Getter@NoArgsConstructor@ToString
 public class Event {
-    public static final String not_started = "Not Started";
-    public static final String started = "Started";
-    public static final String finished = "Finished";
-    public static final String postponed = "Postponed";
+    public static final String NOT_STARTED = "Not Started";
+    public static final String STARTED = "Started";
+    public static final String FINISHED = "Finished";
+    public static final String POSTPONED = "Postponed";
     @Id
     @Column(name = "EventId")
     private String eventId;
@@ -30,25 +31,29 @@ public class Event {
     private String tournament;
     @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "event")
-    private List<Participant> participants;
+    private List<Participant> participants = new ArrayList<>();
     @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "event")
-    private List<EventResult> resultList;
+    private List<EventResult> resultList = new ArrayList<>();
     @Column(name = "StartTime")
     private Date time;
     @Column(name = "EventStatus")
     private String status;
 
     public boolean notFinished() {
-        return !status.equals(finished);
+        return !status.equals(FINISHED);
     }
 
     public boolean notStarted() {
-        return !status.equals(started);
+        return status.equals(NOT_STARTED);
     }
 
     public boolean notPostponed() {
-        return !status.equals(postponed);
+        return !status.equals(POSTPONED);
+    }
+
+    public boolean isPostponed() {
+        return status.equals(POSTPONED);
     }
 
     public void addParticipant(Participant participant){

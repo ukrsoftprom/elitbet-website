@@ -36,7 +36,7 @@ public class BetServiceImpl extends FindById<Bet,BetRepository> implements BetSe
         bet.setStatus(Bet.no_status);
         EventResult eventResult = eventResultService.findById(eventResultId);
         if (!eventResult.getEvent().notStarted()|| betValue>user.getUserBank().getBankValue()){
-            System.out.println("Event has started or you haven`t enough money");
+            System.out.println("Event has STARTED or you haven`t enough money");
             return null;
         }
         bet.setEventResult(eventResult);
