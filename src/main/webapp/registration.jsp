@@ -2,7 +2,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%--
   Created by IntelliJ IDEA.
-  User: Mykola Danyliuk
+  Client: Mykola Danyliuk
   Date: 15.10.2018
   Time: 18:35
   To change this template use File | Settings | File Templates.
@@ -20,9 +20,9 @@
         <h2 class="form-signin-heading">Create your account</h2>
         <spring:bind path="username">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="text" path="username" class="form-control" placeholder="Username"
+                <form:input type="text" path="name" class="form-control" placeholder="Username"
                             autofocus="true"></form:input>
-                <form:errors path="username"></form:errors>
+                <form:errors path="name"></form:errors>
             </div>
         </spring:bind>
 

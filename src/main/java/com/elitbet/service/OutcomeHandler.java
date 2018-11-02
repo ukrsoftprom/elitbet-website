@@ -1,11 +1,7 @@
 package com.elitbet.service;
 
-import com.elitbet.model.BetType;
-import com.elitbet.model.EventType;
-import com.elitbet.model.Participant;
-
-import java.util.List;
+import com.elitbet.model.Statistic;
 
 public interface OutcomeHandler {
-    boolean execute(List<Participant> participantList, double parameter);
+    boolean execute(Statistic statistic, String parameters);
 }

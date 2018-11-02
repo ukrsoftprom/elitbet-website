@@ -20,47 +20,43 @@ public class Event {
     public static final String FINISHED = "Finished";
     public static final String POSTPONED = "Postponed";
     @Id
-    @Column(name = "EventId")
-    private String eventId;
+    @Column(name = "EVENT_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long eventId;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "EventTypeId",referencedColumnName = "EventTypeId")
+    @JoinColumn(name = "EVENT_TYPE_ID",referencedColumnName = "EVENT_TYPE_ID")
     private EventType eventType;
-    @Column(name="Description")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "EVENT_STATUS_ID",referencedColumnName = "EVENT_STATUS_ID")
+    private EventStatus eventStatus;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "STATISTIC_ID",referencedColumnName = "STATISTIC_ID")
+    private Statistic statistic;
+    @Column(name = "FLASHSCORE_ID")
+    private String flashscoreId;
+    @Column(name="DESCRIPTION")
     private String description;
-    @Column(name="Tournament")
+    @Column(name="TOURNAMENT")
     private String tournament;
     @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "event")
-    private List<Participant> participants = new ArrayList<>();
-    @JsonManagedReference
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "event")
-    private List<EventResult> resultList = new ArrayList<>();
-    @Column(name = "StartTime")
-    private Date time;
-    @Column(name = "EventStatus")
-    private String status;
+    private List<Outcome> outcomeList = new ArrayList<>();
+    @Column(name = "START_DATETIME")
+    private Date startDateTime;
 
     public boolean notFinished() {
-        return !status.equals(FINISHED);
+        return !eventStatus.getDescription().equals(EventStatus.FINISHED);
     }
 
     public boolean notStarted() {
-        return status.equals(NOT_STARTED);
+        return !eventStatus.getDescription().equals(EventStatus.NOT_STARTED);
     }
 
     public boolean notPostponed() {
-        return !status.equals(POSTPONED);
+        return !eventStatus.getDescription().equals(EventStatus.POSTPONED);
     }
 
     public boolean isPostponed() {
-        return status.equals(POSTPONED);
-    }
-
-    public void addParticipant(Participant participant){
-        participants.add(participant);
-    }
-
-    public void addEventResult(EventResult eventResult){
-        resultList.add(eventResult);
+        return !eventStatus.getDescription().equals(EventStatus.POSTPONED);
     }
 }

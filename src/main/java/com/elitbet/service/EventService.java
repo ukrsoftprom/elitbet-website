@@ -5,15 +5,15 @@ import com.elitbet.model.Event;
 import java.util.List;
 
 public interface EventService {
-    Event findById(String eventId);
+    Event findByFlashscoreId(String id);
 
     List<Event> findAllNotStarted();
 
     List<Event> findAllByEventType(String description);
 
-    Event updateCoefficients(String id, String coefficientsString);
+    void updateOutcomeOdds(String id, String oddsString);
 
-    Event create(String id, String eventType, long time, String names, String tournament, String coefficients);
+    Event create(String id, String eventType, long time, String names, String tournament, String odds);
 
-    Event update(String id, String tournament, long time, String names, String status, String results);
+    Event update(String id, String tournament, long time, String parameters, String statusFlashscore);
 }

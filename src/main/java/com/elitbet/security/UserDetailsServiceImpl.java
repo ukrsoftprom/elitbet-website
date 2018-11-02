@@ -1,7 +1,7 @@
 package com.elitbet.security;
 
-import com.elitbet.model.User;
-import com.elitbet.repository.UserRepository;
+import com.elitbet.model.Client;
+import com.elitbet.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,15 +14,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Primary
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
-    private UserRepository userRepository;
+    private ClientRepository clientRepository;
 
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        final User user = userRepository.findByUsername(username);
-        if(user==null){
+        final Client client = clientRepository.findByName(username);
+        if(client ==null){
             throw new UsernameNotFoundException(username);
         }
-        return new UserPrincipal(user);
+        return new UserPrincipal(client);
     }
 }

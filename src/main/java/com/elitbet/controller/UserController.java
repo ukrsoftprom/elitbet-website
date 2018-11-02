@@ -1,9 +1,9 @@
 package com.elitbet.controller;
 
-import com.elitbet.model.User;
+import com.elitbet.model.Client;
 import com.elitbet.service.SecurityService;
-import com.elitbet.service.UserBankService;
-import com.elitbet.service.UserService;
+import com.elitbet.service.ClientBankService;
+import com.elitbet.service.ClientService;
 import com.elitbet.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -25,9 +25,9 @@ class UserController {
     @Autowired
     private UserValidator userValidator;
     @Autowired
-    private UserService userService;
+    private ClientService clientService;
     @Autowired
-    private UserBankService userBankService;
+    private ClientBankService clientBankService;
     @Autowired
     private SecurityService securityService;
 
@@ -35,27 +35,27 @@ class UserController {
     @GetMapping(value = "/registration")
     public String registration(Model model){
         logger.info(String.valueOf(SecurityContextHolder.getContext()));
-        model.addAttribute("userForm",new User());
+        model.addAttribute("userForm",new Client());
         return "registration";
     }
 
     @PostMapping(value="/registration")
-    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model){
+    public String registration(@ModelAttribute("userForm") Client userForm, BindingResult bindingResult, Model model){
         logger.info(String.valueOf(SecurityContextHolder.getContext()));
         userValidator.validate(userForm,bindingResult);
         if(bindingResult.hasErrors()){
             return "registration";
         }
         String password = userForm.getPassword();
-        userService.createUser(userForm);
-        securityService.autologin(userForm.getUsername(),password);
+        clientService.createClient(userForm);
+        securityService.autologin(userForm.getName(),password);
         return "redirect:/welcome";
     }
 
     @GetMapping(path = "/user/updateBankValue")
     public ModelAndView updateBankValue(@RequestParam int valueUpdate, Authentication authentication){
-        User user = userService.findByUsername(authentication.getName());
-        userBankService.updateBankValue(user.getUserBank(),valueUpdate);
+        Client client = clientService.findByName(authentication.getName());
+        clientBankService.updateBankValue(client.getClientBank(),valueUpdate);
         return new ModelAndView("allbets");
     }
 
@@ -63,7 +63,7 @@ class UserController {
     public String login(Model model, String error, String logout, WebRequest webRequest) {
         logger.info(String.valueOf(SecurityContextHolder.getContext()));
         if (error != null)
-            model.addAttribute("error", "Your username and password is invalid.");
+            model.addAttribute("error", "Your name and password is invalid.");
         if (logout != null)
             model.addAttribute("message", "You have been logged out successfully.");
         return "login";
@@ -76,7 +76,7 @@ class UserController {
 
     @GetMapping(value = "/users")
     @ResponseBody
-    public List<User> findAll(){
-        return userService.findAll();
+    public List<Client> findAll(){
+        return clientService.findAll();
     }
 }

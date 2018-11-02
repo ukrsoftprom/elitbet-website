@@ -2,7 +2,7 @@
 <html>
 <head>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-    <title>All bets of ${username}</title>
+    <title>All wagers of ${username}</title>
 </head>
 <body>
 <table>
@@ -12,13 +12,13 @@
         <th scope="col">Bet Value</th>
         <th scope="col">Bet Status</th>
     </tr>
-    <c:if test="${not empty bets}">
-        <c:forEach items="${bets}" var="bet">
+    <c:if test="${not empty wagers}">
+        <c:forEach items="${wagers}" var="wager">
             <tr>
-                <th scope="col">${bet.eventResult.event.description} </th>
-                <th scope="col">${bet.eventResult.betType.description} </th>
-                <th scope="col">${bet.value} </th>
-                <th scope="col">${bet.status} </th>
+                <th scope="col">${wager.outcome.event.description} </th>
+                <th scope="col">${wager.outcome.outcomeType.description} </th>
+                <th scope="col">${wager.value} </th>
+                <th scope="col">${wager.status} </th>
             </tr>
         </c:forEach>
     </c:if>

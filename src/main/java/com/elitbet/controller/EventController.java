@@ -21,12 +21,12 @@ class EventController {
             @RequestParam("id") String id,
             @RequestParam("event_type") String eventType,
             @RequestParam("start_timestamp") long time,
-            @RequestParam("names") String nameString,
+            @RequestParam("parameters") String parametersString,
             @RequestParam("tournament") String tournament,
-            @RequestParam("coefficients") String coefficientString){
+            @RequestParam("coefficients") String coefficientsString){
 
-        eventService.updateCoefficients(id,coefficientString);
-        eventService.create(id,eventType,time,nameString,tournament,coefficientString);
+        eventService.updateOutcomeOdds(id,coefficientsString);
+        eventService.create(id,eventType,time,parametersString,tournament,coefficientsString);
     }
 
     @GetMapping(path = "/update")
@@ -35,12 +35,11 @@ class EventController {
             @RequestParam("access_token") String accessToken,
             @RequestParam("id") String id,
             @RequestParam("start_timestamp") long time,
-            @RequestParam("names") String names,
+            @RequestParam("parameters") String parameters,
             @RequestParam("tournament") String tournament,
-            @RequestParam(value = "status") String status,
-            @RequestParam(value = "results") String results){
+            @RequestParam(value = "status") String status){
 
-        eventService.update(id,tournament,time,names,status,results);
+        eventService.update(id,tournament,time,parameters,status);
     }
 
     @GetMapping(path = "/notstarted")

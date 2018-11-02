@@ -1,9 +1,9 @@
 package com.elitbet.controller;
 
-import com.elitbet.model.Bet;
-import com.elitbet.model.User;
-import com.elitbet.service.BetService;
-import com.elitbet.service.UserService;
+import com.elitbet.model.Wager;
+import com.elitbet.model.Client;
+import com.elitbet.service.WagerService;
+import com.elitbet.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -11,40 +11,39 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.awt.*;
 import java.util.List;
 
 @Controller
 @RequestMapping("/bets")
 class BetController {
     @Autowired
-    UserService userService;
+    ClientService clientService;
     @Autowired
-    BetService betService;
+    WagerService wagerService;
 
     @GetMapping("/{id}")
     @ResponseBody
-    public Bet findOne(@PathVariable("id") long id){
-        return betService.findById(id);
+    public Wager findOne(@PathVariable("id") long id){
+        return wagerService.findById(id);
     }
 
     @GetMapping()
     @ResponseBody
-    public List<Bet> findAll(Authentication authentication){
-        return betService.findAllByAuthenticatedUser(authentication);
+    public List<Wager> findAll(Authentication authentication){
+        return wagerService.findAllByAuthenticatedUser(authentication);
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public Bet create(@RequestBody Bet bet){
-        return betService.create(bet);
+    public Wager create(@RequestBody Wager wager){
+        return wagerService.create(wager);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable("id") long id, @RequestBody Bet bet){
-        betService.update(bet);
+    public void update(@PathVariable("id") long id, @RequestBody Wager wager){
+        wagerService.update(wager);
     }
 
     @GetMapping(path = "/create")
@@ -53,20 +52,20 @@ class BetController {
             Authentication authentication,
             @RequestParam("event_result_id") long eventResultId,
             @RequestParam("bet_value") double betValue){
-        User user = userService.findByUsername(authentication.getName());
-        Bet bet = betService.createBet(user,eventResultId,betValue);
-        if (bet == null) {
+        Client client = clientService.findByName(authentication.getName());
+        Wager wager = wagerService.createBet(client,eventResultId,betValue);
+        if (wager == null) {
             return "fuck out mother fucker";
         }
-        return "Created bet: " + bet.getUser() + " to " + bet.getEventResult().getEvent().getDescription() + " " + bet.getValue();
+        return "Created wager: " + wager.getClient() + " to " + wager.getOutcome().getEvent().getDescription() + " " + wager.getBetValue();
     }
 
     // TODO: 29.10.2018 delete in new version of front-end
     @GetMapping(path = "/all")
     public ModelAndView all(Authentication authentication){
-        List<Bet> bets = betService.findAllByAuthenticatedUser(authentication);
+        List<Wager> wagers = wagerService.findAllByAuthenticatedUser(authentication);
         ModelAndView modelAndView = new ModelAndView("allbets");
-        modelAndView.addObject("bets",bets);
+        modelAndView.addObject("bets", wagers);
         modelAndView.addObject("username",authentication.getName());
         return modelAndView;
     }

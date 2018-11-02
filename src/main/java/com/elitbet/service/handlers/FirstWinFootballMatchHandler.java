@@ -1,16 +1,15 @@
 package com.elitbet.service.handlers;
 
-import com.elitbet.model.FootballTeam;
-import com.elitbet.model.Participant;
+import com.elitbet.model.FootballMatchStatistic;
+import com.elitbet.model.Statistic;
 import com.elitbet.service.OutcomeHandler;
 
-import java.util.List;
-
 public class FirstWinFootballMatchHandler implements OutcomeHandler {
+
     @Override
-    public boolean execute(List<Participant> participantList, double parameter) {
-        FootballTeam homeTeam = (FootballTeam) participantList.get(0);
-        FootballTeam awayTeam = (FootballTeam) participantList.get(1);
-        return homeTeam.getGoals() > awayTeam.getGoals();
+    public boolean execute(Statistic statistic, String parameters) {
+        int homeGoals = ((FootballMatchStatistic) statistic).getHomeGoals();
+        int awayGoals = ((FootballMatchStatistic) statistic).getAwayGoals();
+        return homeGoals>awayGoals;
     }
 }

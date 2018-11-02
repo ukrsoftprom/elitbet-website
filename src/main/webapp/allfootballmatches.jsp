@@ -20,7 +20,7 @@
         <tr>
             <th scope="col">${event.description}    </th>
             <c:forEach items="${event.resultList}" var="result">
-                <th scope="col"><a href="${contextPath}/bets/create?event_result_id=${result.eventResultId}&bet_value=10.0">${result.coefficient}    </a></th>
+                <th scope="col"><a href="${contextPath}/wagers/create?event_result_id=${result.eventResultId}&bet_value=10.0">${result.coefficient}    </a></th>
             </c:forEach>
         </tr>
     </c:forEach>

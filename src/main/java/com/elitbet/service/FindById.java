@@ -9,11 +9,11 @@ public class FindById<E,Repository extends JpaRepository<E,Long>> {
     @Autowired
     Repository repository;
 
-    public E findById(Long id){
-        Optional<E> e = repository.findById(id);
+    public E findById(Long clientBankId){
+        Optional<E> e = repository.findById(clientBankId);
         if(e.isPresent()){
             return e.get();
         }
-        throw new IllegalArgumentException("Given event with id=" + id + " does not exists.");
+        throw new IllegalArgumentException("Given event with id=" + clientBankId + " does not exists.");
     }
 }
