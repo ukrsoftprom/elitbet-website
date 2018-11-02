@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +39,7 @@ public class StatisticServiceImpl extends FindById<Statistic,StatisticRepository
     static Map<String,String> parameterMap(String parametersString){
         Map<String, String> parameterMap = new HashMap<>();
         String[] keyValueStrings = parametersString.split(";");
+        System.out.println(Arrays.toString(keyValueStrings));
         for(String keyValueString: keyValueStrings){
             String[] keyValue = keyValueString.split(":");
             parameterMap.put(keyValue[0],keyValue[1]);

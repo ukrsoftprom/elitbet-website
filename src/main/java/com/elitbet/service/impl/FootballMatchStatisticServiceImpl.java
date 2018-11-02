@@ -25,28 +25,27 @@ public class FootballMatchStatisticServiceImpl extends FindById<FootballMatchSta
     StatisticRepository statisticRepository;
 
     @Override
-    public Statistic create(String parametersString) {
+    public FootballMatchStatistic create(String parametersString) {
         FootballMatchStatistic footballMatchStatistic = new FootballMatchStatistic();
         Map<String,String> parameterMap = parameterMap(parametersString);
         footballMatchStatistic.setHomeName(parameterMap.get("home_name"));
         footballMatchStatistic.setAwayName(parameterMap.get("away_name"));
         footballMatchStatistic.setHomeGoals(0);
         footballMatchStatistic.setAwayGoals(0);
-        footballMatchStatistic = footballMatchStatisticRepository.save(footballMatchStatistic);
-        Statistic statistic = statisticService.findById(footballMatchStatistic.getStatisticId());
-        statisticRepository.save(statistic);
+        footballMatchStatistic =  footballMatchStatisticRepository.save(footballMatchStatistic);
+        System.out.println(footballMatchStatistic.getClass());
         return footballMatchStatistic;
     }
 
     @Override
-    public Statistic update(Statistic statistic, String parametersString) {
+    public FootballMatchStatistic update(Statistic statistic, String parametersString) {
+        System.out.println("In football match update" + statistic.getClass());
         FootballMatchStatistic footballMatchStatistic = (FootballMatchStatistic) statistic;
         Map<String,String> parameterMap = parameterMap(parametersString);
         footballMatchStatistic.setHomeName(parameterMap.get("home_name"));
         footballMatchStatistic.setAwayName(parameterMap.get("away_name"));
         footballMatchStatistic.setHomeGoals(Integer.parseInt(parameterMap.get("home_goals")));
         footballMatchStatistic.setAwayGoals(Integer.parseInt(parameterMap.get("away_goals")));
-        footballMatchStatisticRepository.save(footballMatchStatistic);
-        return footballMatchStatistic;
+        return footballMatchStatisticRepository.save(footballMatchStatistic);
     }
 }

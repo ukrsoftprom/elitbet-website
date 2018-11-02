@@ -5,21 +5,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="FOOTBALL_MATCH_STATISTIC")
 @PrimaryKeyJoinColumn(name = "STATISTIC_ID")
-@Setter
-@Getter
 @NoArgsConstructor
+@Getter
+@Setter
 @ToString
 public class FootballMatchStatistic extends Statistic {
-    @Column(name="STATISTIC_ID")
-    private Long statisticId;
+//    @Column(name="STATISTIC_ID")
+//    private Long statisticId;
     @Column(name="HOME_NAME")
     private String homeName;
     @Column(name="AWAY_NAME")

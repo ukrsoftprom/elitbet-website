@@ -14,11 +14,10 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @ToString
-public abstract class Statistic {
+public class Statistic {
     @Id
     @Column(name="STATISTIC_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long statisticId;
-
-    public abstract String names();
+    public String names(){return "";}
 }
