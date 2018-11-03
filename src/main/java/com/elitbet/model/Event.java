@@ -29,7 +29,7 @@ public class Event {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EVENT_STATUS_ID",referencedColumnName = "EVENT_STATUS_ID")
     private EventStatus eventStatus;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "STATISTIC_ID",referencedColumnName = "STATISTIC_ID")
     private Statistic statistic;
     @Column(name = "FLASHSCORE_ID")

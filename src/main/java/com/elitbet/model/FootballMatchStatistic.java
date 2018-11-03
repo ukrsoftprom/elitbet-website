@@ -7,7 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name= "FOOTBALL_MATCH_STATISTIC")
 @Table(name="FOOTBALL_MATCH_STATISTIC")
 @PrimaryKeyJoinColumn(name = "STATISTIC_ID")
 @NoArgsConstructor
@@ -15,8 +15,6 @@ import javax.persistence.*;
 @Setter
 @ToString
 public class FootballMatchStatistic extends Statistic {
-//    @Column(name="STATISTIC_ID")
-//    private Long statisticId;
     @Column(name="HOME_NAME")
     private String homeName;
     @Column(name="AWAY_NAME")

@@ -33,7 +33,6 @@ public class FootballMatchStatisticServiceImpl extends FindById<FootballMatchSta
         footballMatchStatistic.setHomeGoals(0);
         footballMatchStatistic.setAwayGoals(0);
         footballMatchStatistic =  footballMatchStatisticRepository.save(footballMatchStatistic);
-        System.out.println(footballMatchStatistic.getClass());
         return footballMatchStatistic;
     }
 

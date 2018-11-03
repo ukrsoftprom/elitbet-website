@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @ToString
-public class Statistic {
+public abstract class Statistic {
     @Id
     @Column(name="STATISTIC_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

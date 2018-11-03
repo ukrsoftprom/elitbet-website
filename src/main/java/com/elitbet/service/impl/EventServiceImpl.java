@@ -71,11 +71,10 @@ public class EventServiceImpl implements EventService {
             event.setEventStatus(eventStatus);
             event.setStartDateTime(new Date(time));
             Statistic statistic = statisticService.create(eventType, parameters);
-            System.out.println(statistic.getClass());
             event.setStatistic(statistic);
-            event.setDescription(description(time,tournament,statistic.names()));
+            Statistic created = event.getStatistic();
+            event.setDescription(description(time,tournament,created.names()));
             event = eventRepository.save(event);
-            System.out.println("After creating in eventservice.create" + event.getStatistic().getClass());
             addOutcomes(event, oddsMap(oddsString));
         }
         return event;
@@ -99,7 +98,6 @@ public class EventServiceImpl implements EventService {
             event.setStartDateTime(new Date(time));
             event.setTournament(tournament);
             Statistic statistic = event.getStatistic();
-            System.out.println(statistic.getClass());
             statisticService.update(event.getEventType(), statistic, parameters);
             event.setDescription(description(time,tournament,statistic.names()));
             updateStatus(event, statusFlashscore);

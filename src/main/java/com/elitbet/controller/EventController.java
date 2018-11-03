@@ -25,6 +25,7 @@ class EventController {
             @RequestParam("tournament") String tournament,
             @RequestParam("coefficients") String coefficientsString){
 
+        System.out.println("create");
         eventService.updateOutcomeOdds(id,coefficientsString);
         eventService.create(id,eventType,time,parametersString,tournament,coefficientsString);
     }
@@ -38,7 +39,7 @@ class EventController {
             @RequestParam("parameters") String parameters,
             @RequestParam("tournament") String tournament,
             @RequestParam(value = "status") String status){
-
+        System.out.println("update");
         eventService.update(id,tournament,time,parameters,status);
     }
 
