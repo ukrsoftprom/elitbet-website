@@ -38,7 +38,6 @@ public class WagerServiceImpl extends FindById<Wager,WagerRepository> implements
         Outcome outcome = outcomeService.findById(eventResultId);
         // TODO: 02.11.2018 Bet Validator
         if (!outcome.getEvent().notStarted()|| betValue> client.getClientBank().getBankValue()){
-            System.out.println("Event has STARTED or you haven`t enough money");
             return null;
         }
         wager.setOutcome(outcome);
