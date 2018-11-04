@@ -5,10 +5,9 @@ import com.elitbet.model.EventStatus;
 import com.elitbet.model.EventType;
 import com.elitbet.model.Tournament;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Date;
 import java.util.List;
 
 public interface EventRepository extends JpaRepository<Event, String> {
@@ -18,8 +17,7 @@ public interface EventRepository extends JpaRepository<Event, String> {
             EventStatus eventStatus, EventType eventType);
 
     Page<Event> findAllByEventStatus_DescriptionAndTournament(
-            String notStarted, Tournament tournament, PageRequest of);
+            String eventStatusDescription, Tournament tournament, Pageable pageable);
 
-    Page<Event> findAllByEventStatus_Description(
-            String notStarted, PageRequest of);
+    Page<Event> findAllByEventStatus_Description(String eventStatusDescription, Pageable pageable);
 }
