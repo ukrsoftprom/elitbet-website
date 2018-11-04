@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.HashMap;
 
 @Entity(name="STATISTIC")
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -19,5 +20,6 @@ public abstract class Statistic {
     @Column(name="STATISTIC_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long statisticId;
-    public String names(){return "";}
+    public abstract String names();
+    public abstract HashMap<String,String> getDataMap();
 }

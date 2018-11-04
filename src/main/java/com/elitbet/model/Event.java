@@ -23,16 +23,16 @@ public class Event {
     @Column(name = "EVENT_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long eventId;
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EVENT_TYPE_ID",referencedColumnName = "EVENT_TYPE_ID")
     private EventType eventType;
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EVENT_STATUS_ID",referencedColumnName = "EVENT_STATUS_ID")
     private EventStatus eventStatus;
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "STATISTIC_ID",referencedColumnName = "STATISTIC_ID")
     private Statistic statistic;
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TOURNAMENT_ID", referencedColumnName = "TOURNAMENT_ID")
     private Tournament tournament;
     @Column(name = "FLASHSCORE_ID")
@@ -44,14 +44,4 @@ public class Event {
     @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "event")
     private List<Outcome> outcomeList = new ArrayList<>();
-
-    public boolean notFinished() {
-        return !eventStatus.getDescription().equals(EventStatus.FINISHED);
-    }
-
-    public boolean notStarted() {
-        return !eventStatus.getDescription().equals(EventStatus.NOT_STARTED);
-    }
-
-
 }

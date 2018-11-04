@@ -206,7 +206,7 @@ public class EventServiceImpl implements EventService {
     }
 
     private Map<OutcomeType, Double> oddsMap(String oddsString) {
-        Map<OutcomeType,Double> oddsMap = new HashMap<>();
+        Map<OutcomeType,Double> oddsMap = new LinkedHashMap<>();
         String[] keyValueStrings = oddsString.split(";");
         for(String keyValueString: keyValueStrings){
             String[] keyValue = keyValueString.split(":");

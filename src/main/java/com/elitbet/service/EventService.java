@@ -1,6 +1,7 @@
 package com.elitbet.service;
 
 import com.elitbet.model.Event;
+import com.elitbet.model.Statistic;
 import com.elitbet.model.Tournament;
 import org.springframework.data.domain.Page;
 
