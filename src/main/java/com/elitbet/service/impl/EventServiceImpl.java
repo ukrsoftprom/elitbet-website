@@ -234,4 +234,7 @@ public class EventServiceImpl implements EventService {
         long currentTimestamp = System.currentTimeMillis();
         return eventStatus.getDescription().equals(EventStatus.NOT_STARTED) || (startDateTime <= currentTimestamp);
     }
+
+
+
 }

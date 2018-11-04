@@ -17,10 +17,10 @@
         <div class="row">
             <div class="hidden-xs hidden-sm col-md-2 col-lg-3">
                 <ul class="list-group">
-                    <c:forEach items="${tournaments}" var="tournament">
+                    <c:forEach items="${sessionScope.tournaments.keySet()}" var="tournamentKey">
                         <li class="list-group-item">
-                            <span class="badge">1</span>
-                            ${tournament.description}
+                            <span class="badge">${sessionScope.tournaments.get(tournamentKey)}</span>
+                            ${tournamentKey.description}
                         </li>
                     </c:forEach>
                 </ul>
@@ -28,17 +28,19 @@
             <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
                 <table class="table table-striped">
                     <tr>
+                        <th>#</th>
                         <th scope="col">Description</th>
                         <th scope="col">1</th>
                         <th scope="col">2</th>
                         <th scope="col">X</th>
                     </tr>
-                    <c:if test="${not empty events}">
-                        <c:forEach items="${events}" var="event">
+                    <c:if test="${not empty sessionScope.events}">
+                        <c:forEach items="${sessionScope.events}" var="event" varStatus="loop">
                             <tr>
-                                <th scope="col">${event.description} </th>
+                                <td>${loop.index}</td>
+                                <td scope="col">${event.description} </td>
                                 <c:forEach items="${event.outcomeList}" var="outcome">
-                                    <td scope="col"><a                                           href="${contextPath}/wagers/create?event_result_id=${outcome.outcomeId}&bet_value=10.0">${outcome.odds} </a>
+                                    <td scope="col"><a                                           href="${contextPath}/wagers/add?outcomeId=${outcome.outcomeId}">${outcome.odds} </a>
                                     </td>
                                 </c:forEach>
                             </tr>
@@ -66,11 +68,32 @@
                 </nav>
             </div>
             <div class="hidden-xs hidden-sm col-md-2 col-lg-3">
-
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">${dataMap["home_name"]} - ${dataMap["away_name"]} ${outcome.outcomeType.description}</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form action="/wagers/add" modelAttribute="wager" method="post">
+                            <span id="odds">${outcome.odds}</span>
+                            <input type="hidden" name="outcomeId" value="${outcome.outcomeId}">
+                            <input id="betValue" name="betValue" type="number" placeholder="Bet value" class="form-control"/>
+                            <button type="submit" class="button button-success">Bet</button>
+                        </form>
+                        <div id="earn"><div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#betValue").keyup(function(){
+            var odds = $("#odds").html();
+            var earn = odds*$(this).val();
+            $("#earn").html("You will earn " + earn);
+        });
+    });
+</script>
 </body>
 </html>

@@ -32,6 +32,9 @@ nav .top-menu>.top-menu-item:hover{
     width: 100%;
     background-color: red;
 }
+.page{
+    padding: 15px;
+}
 
 .form-signin {
     max-width: 330px;

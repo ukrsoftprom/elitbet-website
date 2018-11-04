@@ -16,4 +16,5 @@ public interface TournamentService {
     List<Event> getCurrentEventsFromTournament(Long tournamentId);
 
     Tournament findByDescription(String description);
+
 }

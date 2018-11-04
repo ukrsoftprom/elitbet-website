@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.jws.WebParam;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -31,6 +32,14 @@ class UserController {
     @Autowired
     private SecurityService securityService;
 
+
+    @GetMapping(value = "/profile")
+    public ModelAndView profile(Authentication authentication){
+        Client client = clientService.findByName(authentication.getName());
+        ModelAndView modelAndView = new ModelAndView("profile");
+        modelAndView.addObject("client", client);
+        return modelAndView;
+    }
 
     @GetMapping(value = "/registration")
     public String registration(Model model){

@@ -7,7 +7,7 @@
 </c:if>
 <html>
 <head>
-    <title>${username} | Wagers</title>
+    <title>${name} | Wagers</title>
     <%@include file="includes.jspf"%>
 </head>
 <body>
@@ -26,16 +26,16 @@
                         <th scope="col">Bet Value</th>
                         <th scope="col">Bet Status</th>
                     </tr>
-                    <c:if test="${not empty wagers}">
-                        <c:forEach items="${wagers}" var="wager">
-                            <tr>
-                                <th scope="col">${wager.outcome.event.description} </th>
-                                <th scope="col">${wager.outcome.outcomeType.description} </th>
-                                <th scope="col">${wager.value} </th>
-                                <th scope="col">${wager.status} </th>
-                            </tr>
-                        </c:forEach>
-                    </c:if>
+
+                    <c:forEach items="${wagers}" var="wager">
+                        <tr>
+                            <th scope="col">${wager.outcome.event.description} </th>
+                            <th scope="col">${wager.outcome.outcomeType.description} </th>
+                            <th scope="col">${wager.betValue} </th>
+                            <th scope="col">${wager.wagerStatus.description} </th>
+                        </tr>
+                    </c:forEach>
+
                 </table>
             </div>
             <div class="hidden-xs hidden-sm col-md-2 col-lg-3"></div>

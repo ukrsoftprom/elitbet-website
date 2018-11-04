@@ -45,4 +45,5 @@ public class StatisticServiceImpl extends FindById<Statistic,StatisticRepository
         }
         return parameterMap;
     }
+
 }
