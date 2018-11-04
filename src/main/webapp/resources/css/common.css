@@ -1,7 +1,36 @@
-body {
-    padding-top: 40px;
-    padding-bottom: 40px;
-    background-color: #eee;
+html, body{
+    padding: 0px;
+    margin: 0px;
+}
+nav.top-navigation{
+    padding: 0px;
+    margin: 0px;
+    background-color: rgba(0,0,0,0.91);
+    width: 100%;
+}
+nav .top-menu{
+    padding: 0px;
+    margin: 0px;
+    list-style: none;
+}
+nav .top-menu>.top-menu-item{
+    display: inline-block;
+    padding: 10px 15px;
+    color: rgba(212,175,55,0.91);
+}
+nav .top-menu-item a, a:hover, a:visited, a:active{
+    color: rgba(212,175,55,0.91);
+    text-decoration: none;
+}
+
+nav .top-menu>.top-menu-item:hover{
+    background-color: rgba(255,255,255, 0.1);
+    cursor: pointer;
+}
+.test{
+    height: 100px;
+    width: 100%;
+    background-color: red;
 }
 
 .form-signin {

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.jws.WebParam;
 import java.util.List;
 
 @Controller
@@ -28,9 +29,12 @@ class BetController {
     }
 
     @GetMapping()
-    @ResponseBody
-    public List<Wager> findAll(Authentication authentication){
-        return wagerService.findAllByAuthenticatedUser(authentication);
+    public ModelAndView findAll(Authentication authentication){
+        ModelAndView mdl = new ModelAndView();
+        mdl.setViewName("bets");
+        List<Wager> wagers = wagerService.findAllByAuthenticatedUser(authentication);
+        mdl.addObject("wagers", wagers);
+        return mdl;
     }
 
     @PostMapping()

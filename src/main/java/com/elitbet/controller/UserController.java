@@ -71,7 +71,7 @@ class UserController {
 
     @GetMapping(value = {"/","/welcome"})
     public String welcome(Model model){
-        return "welcome";
+        return "redirect:/events";
     }
 
     @GetMapping(value = "/users")
