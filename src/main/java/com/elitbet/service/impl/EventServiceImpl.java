@@ -37,15 +37,26 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public List<Event> findAllNotStarted() {
+        return eventRepository.findAllByEventStatus_Description(EventStatus.NOT_STARTED);
+    }
+
+    @Override
+    public List<Event> findAllNotStartedFromTournament(Long tournamentId){
+        return eventRepository.findAllByEventStatus_DescriptionAndTournament_TournamentId(
+                EventStatus.NOT_STARTED, tournamentId);
+    }
+
+    @Override
     public Page<Event> findAllNotStarted(int page, int size) {
         return eventRepository.findAllByEventStatus_Description(
                 Event.NOT_STARTED, PageRequest.of(page,size) );
     }
 
     @Override
-    public Page<Event> findAllNotStartedFromTournament(Tournament tournament, int page, int size){
-        return eventRepository.findAllByEventStatus_DescriptionAndTournament(
-                Event.NOT_STARTED, tournament, PageRequest.of(page,size));
+    public Page<Event> findAllNotStartedFromTournament(Long tournamentId, int page, int size){
+        return eventRepository.findAllByEventStatus_DescriptionAndTournament_TournamentId(
+                Event.NOT_STARTED, tournamentId, PageRequest.of(page,size));
     }
 
     // TODO: 04.11.2018 delete in API 0.3
