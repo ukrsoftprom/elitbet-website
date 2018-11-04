@@ -1,5 +1,6 @@
 package com.elitbet.service;
 
+import com.elitbet.model.Event;
 import com.elitbet.model.Tournament;
 
 import java.util.List;
@@ -11,6 +12,8 @@ public interface TournamentService {
     List<Tournament> findAll();
 
     Map<Tournament,Integer> findTournamentsWithCurrentEvents();
+
+    List<Event> getCurrentEventsFromTournament(Long tournamentId);
 
     Tournament findByDescription(String description);
 }

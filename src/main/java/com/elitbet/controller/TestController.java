@@ -7,6 +7,7 @@ import com.elitbet.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
@@ -30,8 +31,14 @@ public class TestController {
 
     @GetMapping("/test/getdatamap")
     @ResponseBody
-    public void getDataMap(){
-        Statistic statistic = statisticService.findById( 1L);
+    public void getDataMap(@RequestParam(name="id") long id){
+        Statistic statistic = statisticService.findById( id);
         System.out.println(statistic.getDataMap());
+    }
+
+    @GetMapping("/test/geteventlist")
+    @ResponseBody
+    public void getCurrentEventList(@RequestParam(name="id") long id){
+        System.out.println(tournamentService.getCurrentEventsFromTournament(id));
     }
 }

@@ -6,7 +6,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Entity(name= "FOOTBALL_MATCH_STATISTIC")
 @Table(name="FOOTBALL_MATCH_STATISTIC")
@@ -31,8 +32,8 @@ public class FootballMatchStatistic extends Statistic {
     }
 
     @Override
-    public HashMap<String, String> getDataMap() {
-        HashMap<String,String> dataMap = new HashMap<>();
+    public Map<String, String> getDataMap() {
+        Map<String,String> dataMap = new LinkedHashMap<>();
         dataMap.put("home_name",homeName);
         dataMap.put("away_name",awayName);
         dataMap.put("home_goals", String.valueOf(homeGoals));

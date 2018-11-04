@@ -1,6 +1,7 @@
 package com.elitbet.service.impl;
 
 import com.elitbet.model.Event;
+import com.elitbet.model.EventStatus;
 import com.elitbet.model.Tournament;
 import com.elitbet.repository.TournamentRepository;
 import com.elitbet.service.EventService;
@@ -9,9 +10,7 @@ import com.elitbet.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class TournamentServiceImpl extends FindById<Tournament,TournamentRepository> implements TournamentService {
@@ -27,24 +26,28 @@ public class TournamentServiceImpl extends FindById<Tournament,TournamentReposit
 
     @Override
     public Map<Tournament, Integer> findTournamentsWithCurrentEvents() {
-        List<Event> currentEvents = eventService.findAllNotStarted();
-        Map<Tournament,Integer> allTournaments = new HashMap<>();
-        for(Tournament tournament: findAll()){
-            allTournaments.put(tournament,0);
-        }
-        for(Event event: currentEvents){
-            Tournament tournament = event.getTournament();
-            int tournamentCurrentMatches = allTournaments.get(tournament);
-            allTournaments.put(tournament,tournamentCurrentMatches+1);
-        }
-        Map<Tournament,Integer> tournamentsWithCurrentEvents = new HashMap<>();
-        for(Tournament tournament: allTournaments.keySet()){
-            int tournamentCurrentMatches = allTournaments.get(tournament);
-            if(tournamentCurrentMatches!=0){
-                tournamentsWithCurrentEvents.put(tournament,tournamentCurrentMatches);
+        List<Tournament> allTournaments = findAll();
+        Map<Tournament,Integer> tournamentsWithCurrentEvents = new LinkedHashMap<>();
+        for(Tournament tournament: allTournaments){
+            int quantity = tournament.getEventList().size();
+            if(quantity!=0){
+                tournamentsWithCurrentEvents.put(tournament,quantity);
             }
         }
         return tournamentsWithCurrentEvents;
+    }
+
+    @Override
+    public List<Event> getCurrentEventsFromTournament(Long tournamentId){
+        Tournament tournament = findById(tournamentId);
+        List<Event> currentEventList = new ArrayList<>();
+        for(Event event:tournament.getEventList()){
+            System.out.println(event);
+            if(event.getEventStatus().getDescription().equals(EventStatus.NOT_STARTED)){
+                currentEventList.add(event);
+            }
+        }
+        return currentEventList;
     }
 
     @Override

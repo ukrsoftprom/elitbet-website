@@ -92,6 +92,7 @@ public class EventServiceImpl implements EventService {
             event.setStatistic(statistic);
             event.setDescription(description(event.getStartDateTime(),tournament.getDescription(),statistic.names()));
             event = eventRepository.save(event);
+            tournament.addEvent(event);
             addOutcomes(event, oddsMap(oddsString));
         }
         return event;

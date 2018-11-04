@@ -14,7 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @ToString
 public class EventStatus{
-    public static final String NOT_STARTED = "Not started";
+    public static final String NOT_STARTED = "Not Started";
     public static final String STARTED = "Started";
     public static final String FINISHED = "Finished";
     public static final String POSTPONED = "Postponed";

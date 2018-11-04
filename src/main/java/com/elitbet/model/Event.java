@@ -1,5 +1,6 @@
 package com.elitbet.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,7 @@ public class Event {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "STATISTIC_ID",referencedColumnName = "STATISTIC_ID")
     private Statistic statistic;
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TOURNAMENT_ID", referencedColumnName = "TOURNAMENT_ID")
     private Tournament tournament;
@@ -44,4 +46,9 @@ public class Event {
     @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "event")
     private List<Outcome> outcomeList = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return description;
+    }
 }
