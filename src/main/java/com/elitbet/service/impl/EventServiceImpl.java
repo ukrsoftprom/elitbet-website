@@ -5,6 +5,8 @@ import com.elitbet.repository.EventRepository;
 import com.elitbet.service.*;
 import com.elitbet.util.EventStatusManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -25,6 +27,8 @@ public class EventServiceImpl implements EventService {
     @Autowired
     OutcomeTypeService outcomeTypeService;
     @Autowired
+    TournamentService tournamentService;
+    @Autowired
     SimpleDateFormat dateFormat;
 
     @Override
@@ -33,22 +37,23 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> findAllNotStarted() {
-        return eventRepository.getAllByEventStatus_DescriptionNotLike(Event.NOT_STARTED);
+    public Page<Event> findAllNotStarted(int page, int size) {
+        return eventRepository.findAllByEventStatus_Description(
+                Event.NOT_STARTED, PageRequest.of(page,size) );
     }
 
     @Override
-    public List<Event> findAllByEventType(String description) {
-        EventType eventType = eventTypeService.findByDescription(description);
-        EventStatus notStarted = eventStatusService.findByDescription(Event.NOT_STARTED);
-        return eventRepository.getAllByEventStatusEqualsAndEventTypeEqualsOrderByStartDateTime(notStarted, eventType);
+    public Page<Event> findAllNotStartedFromTournament(Tournament tournament, int page, int size){
+        return eventRepository.findAllByEventStatus_DescriptionAndTournament(
+                Event.NOT_STARTED, tournament, PageRequest.of(page,size));
     }
 
+    // TODO: 04.11.2018 delete in API 0.3
     @Override
-    public void updateOutcomeOdds(String flashscoreId, String oddsString){
+    public void updateOdds(String flashscoreId, String oddsString){
         Event event = findByFlashscoreId(flashscoreId);
         Map<OutcomeType,Double> oddsMap = oddsMap(oddsString);
-        if(event!=null&&event.notStarted()&&isValidOdds(oddsMap)){
+        if(event!=null&&event.getEventStatus().getDescription().equals(EventStatus.NOT_STARTED)&&isValidOdds(oddsMap)){
             for(Outcome outcome : event.getOutcomeList()){
                 OutcomeType outcomeType = outcome.getOutcomeType();
                 Double newCoefficient = oddsMap.get(outcomeType);
@@ -56,14 +61,16 @@ public class EventServiceImpl implements EventService {
             }
         }
     }
-    
+
+    // TODO: 04.11.2018 make private in API 0.3 and make more readable
     @Override
     public Event create(String flashscoreId, String eventTypeDescription, long time, String parameters,
-                                             String tournament, String oddsString) {
+                                             String tournamentDescription, String oddsString) {
         Event event = findByFlashscoreId(flashscoreId);
         if(event==null){
             event = new Event();
             event.setFlashscoreId(flashscoreId);
+            Tournament tournament = tournamentService.findByDescription(tournamentDescription);
             event.setTournament(tournament);
             EventType eventType = eventTypeService.findByDescription(eventTypeDescription);
             EventStatus eventStatus = eventStatusService.findByDescription(Event.NOT_STARTED);
@@ -72,8 +79,7 @@ public class EventServiceImpl implements EventService {
             event.setStartDateTime(new Date(time));
             Statistic statistic = statisticService.create(eventType, parameters);
             event.setStatistic(statistic);
-            Statistic created = event.getStatistic();
-            event.setDescription(description(time,tournament,created.names()));
+            event.setDescription(description(event.getStartDateTime(),tournament.getDescription(),statistic.names()));
             event = eventRepository.save(event);
             addOutcomes(event, oddsMap(oddsString));
         }
@@ -91,34 +97,80 @@ public class EventServiceImpl implements EventService {
         }
     }
 
+    // TODO: 04.11.2018 delete in API 0.3
     @Override
-    public Event update(String id , String tournament, long time, String parameters, String statusFlashscore) {
+    public Event update(String id , String tournamentDescription, long time, String parameters, String statusFlashscore) {
         Event event = findByFlashscoreId(id);
-        if(event!=null&&isValidStartTimestamp(time)){
-            event.setStartDateTime(new Date(time));
+        if(event!=null){
+            if(isValidStartTimestamp(event.getEventStatus(),time)){
+                event.setStartDateTime(new Date(time));
+            }
+            Tournament tournament = tournamentService.findByDescription(tournamentDescription);
             event.setTournament(tournament);
             Statistic statistic = event.getStatistic();
             statisticService.update(event.getEventType(), statistic, parameters);
-            event.setDescription(description(time,tournament,statistic.names()));
+            event.setDescription(description(event.getStartDateTime(),tournament.getDescription(),statistic.names()));
             updateStatus(event, statusFlashscore);
         }
         return event;
     }
 
+    // TODO: 04.11.2018 for API 0.3
+    @Override
+    public Event update(String flashscoreId, String tournamentDescription, long time, String parametersString, String statusFlashscore, String oddsString, String eventType) {
+        Event event = findByFlashscoreId(flashscoreId);
+        if(event==null){
+            return create(flashscoreId,eventType,time,parametersString,tournamentDescription,oddsString);
+        }
+        updateOdds(event,oddsString);
+        updateStartTime(event,time);
+        updateStatistic(event, parametersString);
+        updateStatus(event,statusFlashscore);
+        updateDescription(event);
+        return event;
+    }
+
+    // TODO: 04.11.2018 for API 0.3
+    private void updateOdds(Event event, String oddsString){
+        Map<OutcomeType,Double> oddsMap = oddsMap(oddsString);
+        if(event!=null&&event.getEventStatus().getDescription().equals(EventStatus.NOT_STARTED)&&isValidOdds(oddsMap)){
+            for(Outcome outcome : event.getOutcomeList()){
+                OutcomeType outcomeType = outcome.getOutcomeType();
+                Double newCoefficient = oddsMap.get(outcomeType);
+                outcomeService.updateOdds(outcome,newCoefficient);
+            }
+        }
+    }
+
+    private void updateDescription(Event event) {
+        Date startDateTime = event.getStartDateTime();
+        String tournamentDescription = event.getTournament().getDescription();
+        String statisticNames = event.getStatistic().names();
+        String newDescription = description(startDateTime,tournamentDescription,statisticNames);
+        event.setDescription(newDescription);
+    }
+
+    private void updateStartTime(Event event, long time){
+        if(isValidStartTimestamp(event.getEventStatus(),time)){
+            event.setStartDateTime(new Date(time));
+        }
+    }
+
+    private void updateStatistic(Event event,String parametersString){
+        statisticService.update(event.getEventType(), event.getStatistic() , parametersString);
+    }
+
     private void updateStatus(Event event, String statusFlashscore) {
         String status = EventStatusManager.getInstance().getStatus(
                 event.getEventType().getDescription(),statusFlashscore);
-        event.setEventStatus(eventStatusService.findByDescription(status));
-        switch (status){
-            case Event.FINISHED: {
-                updateOutcomesResults(event);
-                calculateBets(event);
-                break;
-            }
-            case Event.POSTPONED: {
-                calculateBets(event);
-                break;
-            }
+        EventStatus eventStatus = eventStatusService.findByDescription(status);
+        event.setEventStatus(eventStatus);
+        eventRepository.save(event);
+        if (Event.FINISHED.equals(status)) {
+            updateOutcomesResults(event);
+            calculateBets(event);
+        } else if (Event.POSTPONED.equals(status)) {
+            calculateBets(event);
         }
     }
 
@@ -137,9 +189,9 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    private String description(long time, String tournament, String names) {
-        String date = dateFormat.format(new Date(time));
-        return date + " " + tournament + ". " + names;
+    private String description(Date date, String tournament, String names) {
+        String dateString = dateFormat.format(date);
+        return dateString + " " + tournament + ". " + names;
     }
 
     private Map<OutcomeType, Double> oddsMap(String oddsString) {
@@ -166,8 +218,8 @@ public class EventServiceImpl implements EventService {
     }
 
     // TODO: 02.11.2018 validator
-    private boolean isValidStartTimestamp(long startDateTime){
+    private boolean isValidStartTimestamp(EventStatus eventStatus, long startDateTime){
         long currentTimestamp = System.currentTimeMillis();
-        return (startDateTime<currentTimestamp);
+        return eventStatus.getDescription().equals(EventStatus.NOT_STARTED) || (startDateTime <= currentTimestamp);
     }
 }

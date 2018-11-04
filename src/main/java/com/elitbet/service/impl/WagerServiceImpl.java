@@ -37,7 +37,8 @@ public class WagerServiceImpl extends FindById<Wager,WagerRepository> implements
         wager.setWagerStatus(noStatus);
         Outcome outcome = outcomeService.findById(eventResultId);
         // TODO: 02.11.2018 Bet Validator
-        if (!outcome.getEvent().notStarted()|| betValue> client.getClientBank().getBankValue()){
+        if (!outcome.getEvent().getEventStatus().getDescription().equals(EventStatus.NOT_STARTED) ||
+                betValue> client.getClientBank().getBankValue()){
             return null;
         }
         wager.setOutcome(outcome);

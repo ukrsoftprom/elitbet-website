@@ -21,7 +21,7 @@ public class Wager {
     private Outcome outcome;
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "CLIENT_ID")
     private Client client;
     @OneToOne
     @JoinColumn(name = "WAGER_STATUS_ID",referencedColumnName = "WAGER_STATUS_ID")

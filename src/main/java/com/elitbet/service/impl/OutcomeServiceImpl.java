@@ -38,7 +38,6 @@ public class OutcomeServiceImpl extends FindById<Outcome,OutcomeRepository>
         return outcomeRepository.save(outcome);
     }
 
-
     @Override
     public Outcome updateOutcomeResult(Outcome outcome) {
         Event event = outcome.getEvent();

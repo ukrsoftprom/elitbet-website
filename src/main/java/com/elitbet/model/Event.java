@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "Event")
+@Table(name = "EVENT")
 @Setter@Getter@NoArgsConstructor@ToString
 public class Event {
     public static final String NOT_STARTED = "Not Started";
@@ -32,17 +32,18 @@ public class Event {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "STATISTIC_ID",referencedColumnName = "STATISTIC_ID")
     private Statistic statistic;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TOURNAMENT_ID", referencedColumnName = "TOURNAMENT_ID")
+    private Tournament tournament;
     @Column(name = "FLASHSCORE_ID")
     private String flashscoreId;
     @Column(name="DESCRIPTION")
     private String description;
-    @Column(name="TOURNAMENT")
-    private String tournament;
+    @Column(name = "START_DATETIME")
+    private Date startDateTime;
     @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "event")
     private List<Outcome> outcomeList = new ArrayList<>();
-    @Column(name = "START_DATETIME")
-    private Date startDateTime;
 
     public boolean notFinished() {
         return !eventStatus.getDescription().equals(EventStatus.FINISHED);
@@ -52,11 +53,5 @@ public class Event {
         return !eventStatus.getDescription().equals(EventStatus.NOT_STARTED);
     }
 
-    public boolean notPostponed() {
-        return !eventStatus.getDescription().equals(EventStatus.POSTPONED);
-    }
 
-    public boolean isPostponed() {
-        return !eventStatus.getDescription().equals(EventStatus.POSTPONED);
-    }
 }

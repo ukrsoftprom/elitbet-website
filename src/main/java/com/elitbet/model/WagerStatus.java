@@ -14,10 +14,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @ToString
 public class WagerStatus {
-    public static final String NO_STATUS = "NO STATUS";
-    public static final String PASSED = "PASSED";
-    public static final String NOT_PASSED = "NOT PASSED";
-    public static final String RETURNED = "RETURNED";
+    public static final String NO_STATUS = "No status";
+    public static final String PASSED = "Passed";
+    public static final String NOT_PASSED = "Not passed";
+    public static final String RETURNED = "Returned";
 
     @Id
     @Column(name = "WAGER_STATUS_ID")

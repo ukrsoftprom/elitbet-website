@@ -50,10 +50,10 @@ class BetController {
     @ResponseBody
     public String createBet(
             Authentication authentication,
-            @RequestParam("event_result_id") long eventResultId,
+            @RequestParam("outcome_id") long outcomeId,
             @RequestParam("bet_value") double betValue){
         Client client = clientService.findByName(authentication.getName());
-        Wager wager = wagerService.createBet(client,eventResultId,betValue);
+        Wager wager = wagerService.createBet(client,outcomeId,betValue);
         if (wager == null) {
             return "fuck out mother fucker";
         }

@@ -38,7 +38,6 @@ public class FootballMatchStatisticServiceImpl extends FindById<FootballMatchSta
 
     @Override
     public FootballMatchStatistic update(Statistic statistic, String parametersString) {
-        System.out.println("In football match update" + statistic.getClass());
         FootballMatchStatistic footballMatchStatistic = (FootballMatchStatistic) statistic;
         Map<String,String> parameterMap = parameterMap(parametersString);
         footballMatchStatistic.setHomeName(parameterMap.get("home_name"));

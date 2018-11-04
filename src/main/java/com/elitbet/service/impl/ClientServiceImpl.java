@@ -6,6 +6,7 @@ import com.elitbet.service.FindById;
 import com.elitbet.service.ClientBankService;
 import com.elitbet.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class ClientServiceImpl extends FindById<Client,ClientRepository> impleme
     @Override
     public void createClient(Client client){
         client.setPassword(passwordEncoder.encode(client.getPassword()));
+        client.setEmail("");
         client =  clientRepository.save(client);
         clientBankService.createClientBank(client);
     }
@@ -44,4 +46,5 @@ public class ClientServiceImpl extends FindById<Client,ClientRepository> impleme
     public List<Client> findAll() {
         return clientRepository.findAll();
     }
+
 }
