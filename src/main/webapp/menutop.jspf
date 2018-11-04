@@ -1,0 +1,12 @@
+<sec:authorize var="isFullyAuth" access="isFullyAuthenticated()"></sec:authorize>
+<nav class="top-navigation">
+    <ul class="top-menu">
+        <li class="top-menu-item"><a href="/">Elitbet</a></li>
+        <c:if test="${isFullyAuth}">
+            <li class="top-menu-item"><a href="/bets">Bets</a></li>
+            <li class="top-menu-item"><a href="/logout">Logout</a></li>
+        </c:if>
+    </ul>
+</nav>
+
+
