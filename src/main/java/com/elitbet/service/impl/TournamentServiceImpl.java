@@ -26,7 +26,7 @@ public class TournamentServiceImpl extends FindById<Tournament,TournamentReposit
     }
 
     @Override
-    public Map<Tournament, Integer> findTournamentsWithCurrentMatches() {
+    public Map<Tournament, Integer> findTournamentsWithCurrentEvents() {
         List<Event> currentEvents = eventService.findAllNotStarted();
         Map<Tournament,Integer> allTournaments = new HashMap<>();
         for(Tournament tournament: findAll()){
@@ -37,14 +37,14 @@ public class TournamentServiceImpl extends FindById<Tournament,TournamentReposit
             int tournamentCurrentMatches = allTournaments.get(tournament);
             allTournaments.put(tournament,tournamentCurrentMatches+1);
         }
-        Map<Tournament,Integer> tournamentsWithCurrentMatches = new HashMap<>();
+        Map<Tournament,Integer> tournamentsWithCurrentEvents = new HashMap<>();
         for(Tournament tournament: allTournaments.keySet()){
             int tournamentCurrentMatches = allTournaments.get(tournament);
             if(tournamentCurrentMatches!=0){
-                tournamentsWithCurrentMatches.put(tournament,tournamentCurrentMatches);
+                tournamentsWithCurrentEvents.put(tournament,tournamentCurrentMatches);
             }
         }
-        return tournamentsWithCurrentMatches;
+        return tournamentsWithCurrentEvents;
     }
 
     @Override

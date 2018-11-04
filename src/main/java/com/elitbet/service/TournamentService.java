@@ -10,7 +10,7 @@ public interface TournamentService {
 
     List<Tournament> findAll();
 
-    Map<Tournament,Integer> findTournamentsWithCurrentMatches();
+    Map<Tournament,Integer> findTournamentsWithCurrentEvents();
 
     Tournament findByDescription(String description);
 }
