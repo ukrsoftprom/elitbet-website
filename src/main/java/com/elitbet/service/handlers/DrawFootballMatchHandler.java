@@ -1,15 +1,20 @@
 package com.elitbet.service.handlers;
 
 import com.elitbet.model.FootballMatchStatistic;
+import com.elitbet.model.Status;
 import com.elitbet.model.Statistic;
 import com.elitbet.service.OutcomeHandler;
 
 public class DrawFootballMatchHandler implements OutcomeHandler {
 
     @Override
-    public boolean execute(Statistic statistic, String parameters) {
+    public String execute(Statistic statistic, String parameters) {
         int homeGoals = ((FootballMatchStatistic) statistic).getHomeGoals();
         int awayGoals = ((FootballMatchStatistic) statistic).getAwayGoals();
-        return homeGoals==awayGoals;
+        if(homeGoals==awayGoals) {
+            return Status.OUTCOME_PASSED;
+        } else {
+            return Status.OUTCOME_NOT_PASSED;
+        }
     }
 }

@@ -30,33 +30,7 @@ class WagerController {
     WagerService wagerService;
     @Autowired
     OutcomeService outcomeService;
-    @Autowired
-    EventService eventService;
 
-    /*@GetMapping()
-    public ModelAndView findAll(Authentication authentication){
-        ModelAndView mdl = new ModelAndView();
-        mdl.setViewName("bets");
-        List<Wager> wagers = wagerService.findAllByAuthenticatedUser(authentication);
-        mdl.addObject("wagers", wagers);
-        return mdl;
-    }*/
-
-    @GetMapping(path = "/create")
-    @ResponseBody
-    public String createBet(
-            Authentication authentication,
-            @RequestParam("outcome_id") long outcomeId,
-            @RequestParam("bet_value") double betValue){
-        Client client = clientService.findByName(authentication.getName());
-        Wager wager = wagerService.createBet(client,outcomeId,betValue);
-        if (wager == null) {
-            return "fuck out mother fucker";
-        }
-        return "Created wager: " + wager.getClient() + " to " + wager.getOutcome().getEvent().getDescription() + " " + wager.getBetValue();
-    }
-
-    // TODO: 29.10.2018 delete in new version of front-end
     @GetMapping(path = "/all")
     public ModelAndView all(Authentication authentication){
         List<Wager> wagers = wagerService.findAllByAuthenticatedUser(authentication);

@@ -34,11 +34,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public SimpleDateFormat dateFormat(){
-        return new SimpleDateFormat("dd MMMM HH:mm");
-    }
-
-    @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
@@ -62,7 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/resources/**", "/registration", "/events/**").permitAll()
+                .antMatchers("/resources/**", "/registration", "/parser/**").permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .formLogin()

@@ -16,10 +16,6 @@ import java.util.List;
 @Table(name = "EVENT")
 @Setter@Getter@NoArgsConstructor@ToString
 public class Event {
-    public static final String NOT_STARTED = "Not Started";
-    public static final String STARTED = "Started";
-    public static final String FINISHED = "Finished";
-    public static final String POSTPONED = "Postponed";
     @Id
     @Column(name = "EVENT_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,16 +35,9 @@ public class Event {
     private Tournament tournament;
     @Column(name = "FLASHSCORE_ID")
     private String flashscoreId;
-    @Column(name="DESCRIPTION")
-    private String description;
     @Column(name = "START_DATETIME")
     private Date startDateTime;
     @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "event")
     private List<Outcome> outcomeList = new ArrayList<>();
-
-    @Override
-    public String toString() {
-        return description;
-    }
 }

@@ -19,8 +19,6 @@ public class Client {
     private Long userId;
     @Column(name="NAME")
     private String name;
-    @Column(name="EMAIL")
-    private String email;
     @Column(name="PASSWORD")
     private String password;
     @JsonBackReference

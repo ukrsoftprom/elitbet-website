@@ -16,7 +16,7 @@ public class Outcome {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long outcomeId;
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "EVENT_ID")
     private Event event;
     @OneToOne(fetch = FetchType.LAZY)

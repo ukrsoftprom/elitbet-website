@@ -7,7 +7,7 @@
 </c:if>
 <html>
 <head>
-    <title>${username} | All events</title>
+    <title>${name} | All events</title>
     <%@include file="includes.jspf" %>
 </head>
 <body>
@@ -31,14 +31,14 @@
                         <th>#</th>
                         <th scope="col">Description</th>
                         <th scope="col">1</th>
-                        <th scope="col">2</th>
                         <th scope="col">X</th>
+                        <th scope="col">2</th>
                     </tr>
                     <c:if test="${not empty sessionScope.events}">
                         <c:forEach items="${sessionScope.events}" var="event" varStatus="loop">
                             <tr>
                                 <td>${loop.index}</td>
-                                <td scope="col">${event.description} </td>
+                                <td scope="col">${event.statistic.names()} </td>
                                 <c:forEach items="${event.outcomeList}" var="outcome">
                                     <td scope="col"><a                                           href="${contextPath}/wagers/add?outcomeId=${outcome.outcomeId}">${outcome.odds} </a>
                                     </td>

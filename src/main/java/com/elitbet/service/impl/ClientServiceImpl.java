@@ -26,11 +26,9 @@ public class ClientServiceImpl extends FindById<Client,ClientRepository> impleme
         return clientRepository.findByName(username);
     }
 
-    // TODO: 18.10.2018 Додати реєстрацію з поштою
     @Override
     public void createClient(Client client){
         client.setPassword(passwordEncoder.encode(client.getPassword()));
-        client.setEmail("");
         client =  clientRepository.save(client);
         clientBankService.createClientBank(client);
     }

@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 public interface OutcomeService {
     Outcome findById(Long EventResultId);
     Outcome createOutcome(Event event, OutcomeType outcomeType, double odds);
-    Outcome updateOdds(Outcome outcome, double odds);
+    void updateOdds(Outcome outcome, double odds);
 
-    Outcome updateOutcomeResult(Outcome outcome);
+    void updateOutcomeResult(Outcome outcome);
 
-    void notifyResult(Outcome outcome);
+    void calculateWagers(Outcome outcome);
 }

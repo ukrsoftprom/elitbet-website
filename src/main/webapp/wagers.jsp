@@ -29,7 +29,7 @@
 
                     <c:forEach items="${wagers}" var="wager">
                         <tr>
-                            <th scope="col">${wager.outcome.event.description} </th>
+                            <th scope="col">${wager.outcome.event.statistic.names()} </th>
                             <th scope="col">${wager.outcome.outcomeType.description} </th>
                             <th scope="col">${wager.betValue} </th>
                             <th scope="col">${wager.wagerStatus.description} </th>

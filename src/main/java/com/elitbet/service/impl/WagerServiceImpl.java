@@ -14,7 +14,7 @@ public class WagerServiceImpl extends FindById<Wager,WagerRepository> implements
     @Autowired
     WagerRepository wagerRepository;
     @Autowired
-    WagerStatusService wagerStatusService;
+    StatusService statusService;
     @Autowired
     EventService eventService;
     @Autowired
@@ -25,74 +25,59 @@ public class WagerServiceImpl extends FindById<Wager,WagerRepository> implements
     ClientBankService clientBankService;
 
     @Override
-    public List<Wager> findAllByEventResult(Outcome outcome){
+    public List<Wager> findAllByAuthenticatedUser(Authentication authentication) {
+        Client client = clientService.findByName(authentication.getName());
+        return wagerRepository.getAllByClient(client);
+    }
+
+    @Override
+    public List<Wager> findAllByOutcome(Outcome outcome){
         return wagerRepository.getAllByOutcome(outcome);
     }
 
     @Override
     public Wager createBet(Client client, long eventResultId, double betValue) {
-        Wager wager = new Wager();
-        wager.setClient(client);
-        WagerStatus noStatus = wagerStatusService.findByDescription(WagerStatus.NO_STATUS);
-        wager.setWagerStatus(noStatus);
+        Wager wager = null;
         Outcome outcome = outcomeService.findById(eventResultId);
-        // TODO: 02.11.2018 Bet Validator
-        if (!outcome.getEvent().getEventStatus().getDescription().equals(EventStatus.NOT_STARTED) ||
-                betValue> client.getClientBank().getBankValue()){
-            return null;
+        if(isValidWager(outcome.getEvent(),client.getClientBank(),betValue)) {
+            wager = new Wager();
+            wager.setClient(client);
+            wager.setWagerStatus(statusService.getWagerStatus(Status.WAGER_NO_STATUS));
+            wager.setOutcome(outcome);
+            wager.setOdds(outcome.getOdds());
+            wager.setBetValue(betValue);
+            clientBankService.updateBankValue(client.getClientBank(), -betValue);
+            wagerRepository.save(wager);
         }
-        wager.setOutcome(outcome);
-        wager.setOdds(outcome.getOdds());
-        wager.setBetValue(betValue);
-        clientBankService.updateBankValue(wager.getClient().getClientBank(),-betValue);
-        return wagerRepository.save(wager);
+        return wager;
     }
 
     @Override
-    public Wager updateStatus(Wager wager, String description) {
-        wager.setWagerStatus(wagerStatusService.findByDescription(description));
-        return wagerRepository.save(wager);
-    }
-
-
-    @Override
-    public List<Wager> findAllByUser(Client client) {
-        return wagerRepository.getAllByClient(client);
-    }
-
-    @Override
-    public List<Wager> findAllByAuthenticatedUser(Authentication authentication) {
-        Client client = clientService.findByName(authentication.getName());
-        return findAllByUser(client);
-    }
-
-    @Override
-    public Wager calculateBet(Wager wager) {
-        OutcomeStatus outcomeStatus = wager.getOutcome().getOutcomeStatus();
-        switch (outcomeStatus.getDescription()) {
-            case OutcomeStatus.RETURNED:
-                updateStatus(wager, WagerStatus.RETURNED);
-                clientBankService.updateBankValue(wager.getClient().getClientBank(), wager.getBetValue());
-                break;
-            case OutcomeStatus.PASSED:
-                updateStatus(wager, WagerStatus.PASSED);
-                double updateValue = wager.getBetValue() * wager.getOdds();
-                clientBankService.updateBankValue(wager.getClient().getClientBank(), updateValue);
-                break;
-            default:
-                updateStatus(wager, WagerStatus.NOT_PASSED);
-                break;
-        }
-        return wagerRepository.save(wager);
-    }
-
-    @Override
-    public Wager create(Wager wager) {
-        return wagerRepository.save(wager);
-    }
-
-    @Override
-    public void update(Wager wager) {
+    public void calculateWager(Wager wager) {
+        String status = wager.getOutcome().getOutcomeStatus().getDescription();
+        ClientBank clientBank = wager.getClient().getClientBank();
+        updateStatus(wager,status);
+        clientBankService.updateBankValue(clientBank,updateValue(wager,status));
         wagerRepository.save(wager);
+    }
+
+    private void updateStatus(Wager wager, String description) {
+        wager.setWagerStatus(statusService.getWagerStatus(description));
+        wagerRepository.save(wager);
+    }
+
+    private double updateValue(Wager wager, String outcomeStatus){
+        switch (outcomeStatus){
+            case Status.OUTCOME_PASSED: return wager.getBetValue() * wager.getOdds();
+            case Status.OUTCOME_RETURNED: return wager.getBetValue();
+            case Status.OUTCOME_NOT_PASSED: return 0;
+            default: return 0;
+        }
+    }
+
+    // TODO: 05.11.2018 validator
+    private boolean isValidWager(Event event, ClientBank clientBank, double betValue){
+        String eventStatus = event.getEventStatus().getDescription();
+        return eventStatus.equals(Status.EVENT_NOT_STARTED) && (betValue <= clientBank.getBankValue());
     }
 }

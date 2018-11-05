@@ -1,6 +1,6 @@
 package com.elitbet.util;
 
-import com.elitbet.model.EventType;
+import com.elitbet.model.Status;
 import com.elitbet.service.FootballMatchStatisticService;
 
 import java.util.HashMap;
@@ -11,7 +11,7 @@ public class StatisticServiceManager {
     private Map<String, Class> services = new HashMap<>();
 
     private StatisticServiceManager() {
-        services.put(EventType.FOOTBALL_MATCH, FootballMatchStatisticService.class);
+        services.put(Status.EVENT_TYPE_FOOTBALL_MATCH, FootballMatchStatisticService.class);
     }
 
     private static class StatisticManagerHolder{

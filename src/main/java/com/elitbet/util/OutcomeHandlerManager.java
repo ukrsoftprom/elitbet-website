@@ -1,7 +1,6 @@
 package com.elitbet.util;
 
-import com.elitbet.model.OutcomeType;
-import com.elitbet.model.EventType;
+import com.elitbet.model.Status;
 import com.elitbet.model.Statistic;
 import com.elitbet.service.OutcomeHandler;
 import com.elitbet.service.handlers.DrawFootballMatchHandler;
@@ -17,9 +16,9 @@ public class OutcomeHandlerManager {
     private Map<Map.Entry<String,String>,OutcomeHandler> outcomeHandlersMap = new HashMap<>();
 
     {
-        add(OutcomeType.FIRST_WIN,EventType.FOOTBALL_MATCH, new FirstWinFootballMatchHandler());
-        add(OutcomeType.SECOND_WIN,EventType.FOOTBALL_MATCH,new SecondWinFootballMatchHandler());
-        add(OutcomeType.DRAW,EventType.FOOTBALL_MATCH,new DrawFootballMatchHandler());
+        add(Status.OUTCOME_TYPE_FIRST_WIN,Status.EVENT_TYPE_FOOTBALL_MATCH, new FirstWinFootballMatchHandler());
+        add(Status.OUTCOME_TYPE_SECOND_WIN,Status.EVENT_TYPE_FOOTBALL_MATCH,new SecondWinFootballMatchHandler());
+        add(Status.OUTCOME_TYPE_DRAW,Status.EVENT_TYPE_FOOTBALL_MATCH,new DrawFootballMatchHandler());
     }
 
     private void add(String outcomeType, String eventType, OutcomeHandler outcomeHandler){
@@ -32,7 +31,7 @@ public class OutcomeHandlerManager {
         return ourInstance;
     }
 
-    public boolean result(String outcomeType, String eventType, Statistic statistic, String parameters) {
+    public String result(String outcomeType, String eventType, Statistic statistic, String parameters) {
         Map.Entry<String,String> key = new AbstractMap.SimpleEntry<>(outcomeType,eventType);
         OutcomeHandler handler = outcomeHandlersMap.get(key);
         return handler.execute(statistic, parameters);

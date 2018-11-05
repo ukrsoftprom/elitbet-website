@@ -49,7 +49,7 @@ class UserController {
     }
 
     @PostMapping(value="/registration")
-    public String registration(@ModelAttribute("userForm") Client userForm, BindingResult bindingResult, Model model){
+    public String registration(@ModelAttribute("userForm") Client userForm, BindingResult bindingResult){
         logger.info(String.valueOf(SecurityContextHolder.getContext()));
         userValidator.validate(userForm,bindingResult);
         if(bindingResult.hasErrors()){

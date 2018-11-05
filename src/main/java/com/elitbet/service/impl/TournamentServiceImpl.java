@@ -2,6 +2,7 @@ package com.elitbet.service.impl;
 
 import com.elitbet.model.Event;
 import com.elitbet.model.EventStatus;
+import com.elitbet.model.Status;
 import com.elitbet.model.Tournament;
 import com.elitbet.repository.TournamentRepository;
 import com.elitbet.service.EventService;
@@ -43,7 +44,7 @@ public class TournamentServiceImpl extends FindById<Tournament,TournamentReposit
         List<Event> currentEventList = new ArrayList<>();
         for(Event event:tournament.getEventList()){
             System.out.println(event);
-            if(event.getEventStatus().getDescription().equals(EventStatus.NOT_STARTED)){
+            if(event.getEventStatus().getDescription().equals(Status.EVENT_NOT_STARTED)){
                 currentEventList.add(event);
             }
         }

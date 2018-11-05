@@ -21,6 +21,7 @@ public abstract class Statistic {
     @Column(name="STATISTIC_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long statisticId;
+
     public abstract String names();
     public abstract Map<String,String> getDataMap();
 }
